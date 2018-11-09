@@ -55,7 +55,7 @@ $(function () {
                 console.log(buyQuantity);
                 console.log(stockQuantity);
                 console.log(newStock);
-                
+        
             }
             $(`#btn${i}`).on("click", run);
         }

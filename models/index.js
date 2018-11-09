@@ -33,4 +33,20 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+var mysql = require("mysql");
+var connection;
+
+if(process.env.JAWSDB_URL) {
+  connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+  connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "hacktheplanet",
+    database: "bamazon"
+  })
+}
+connection.connect();
+
+module.exports = {connection,
+                    db};
