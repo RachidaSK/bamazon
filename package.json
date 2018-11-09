@@ -1,0 +1,26 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "The web app will take in orders from customers and deplete stock from the store's inventory.",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mysql2": "^1.6.2",
+    "sequelize": "^4.41.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RachidaSK/bamazon.git"
+  },
+  "author": "Rachida Kone",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RachidaSK/bamazon/issues"
+  },
+  "homepage": "https://github.com/RachidaSK/bamazon#readme"
+}
