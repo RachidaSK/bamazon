@@ -4,14 +4,14 @@ module.exports = function (sequelize, Datatypes) {
             type: Datatypes.STRING,
             validate: {
                 len: [2, 50],
-                notNull: true
+                // notNull: true
             }
         },
         department_name: {
             type: Datatypes.STRING,
             validate: {
                 len: [2, 30],
-                notNull: true
+                // notNull: true
             }
         },
         price: {
@@ -19,7 +19,7 @@ module.exports = function (sequelize, Datatypes) {
             validate: {
                 isNumeric: true,
                 isFloat: true,
-                notNull: true,
+                // notNull: true,
                 isPositive(value) {
                     if(parseFloat(value) < 0){
                         throw new Error ('Only positive values are allowed')
@@ -33,7 +33,7 @@ module.exports = function (sequelize, Datatypes) {
             Validate: {
                 isNumeric: true,
                 isInt: true,
-                notNull: true,
+                // notNull: true,
                 min: 0,
             }
 

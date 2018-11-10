@@ -4,7 +4,7 @@ $(function () {
         url: "/api/products"
     }).then(function (data) {
         console.log(data);
-
+        const shoppingCart = [];
 
         for (let i = 0; i < data.length; i++) {
 
@@ -26,7 +26,8 @@ $(function () {
             productCard.append(`<div class='card-body'>
                                     <div class='d-flex flex-row bd-highlight justify-content-between mb-3'>
                                         <div class='bd-highlight col-5 col-sm-8 col-md-8 item-name'>
-                                           <h1 class='ml-3 product-name'>${data[i].product_name}</h1>
+                                           <input type='text' readonly class='form-control-plaintext ml-3 product-name' id='item${i}' value="${data[i].product_name}">
+                                           <input type='text' readonly class='form-control-plaintext ml-3 product-name' id='price${i}' value='$ ${data[i].price}'>
                                         </div>
                                         <div class='bd-highlight col-2 col-sm-1 col-md-1'>
                                            <form>
@@ -46,18 +47,54 @@ $(function () {
 
             $(".productlist").append(productCard);
 
-            const run = function () {
+            // Add Items to cart on click
+
+            const addtoCart = function () {
+
+                //Grab input values
+                const selectedItem = $(`#item${i}`).val();
                 const buyQuantity = $(`#item-qty${i}`).val();
+                const unitPrice = $(`#price${i}`).val();
                 const stockQuantity = $(`#stock-qty${i}`).val();
+
+                //Clear the input field
+                $(`#item-qty${i}`).val('');
+
+                //Create an order object
+                const newOrder = {
+                   product_name: selectedItem,
+                   price: unitPrice,
+                   quantity: buyQuantity
+                }
+
+                //Push the object to the shopping cart
+                shoppingCart.push(newOrder);
 
                 const newStock = stockQuantity - buyQuantity;
 
+                //Update the stock
+                data[i].stock_quantity = parseInt(newStock);
+                
+                
+
+                $.ajax({
+                    type: "PUT",
+                    URL: `/api/products`,
+                    data: data[i]
+                });
+
+
+                console.log(selectedItem);
                 console.log(buyQuantity);
                 console.log(stockQuantity);
                 console.log(newStock);
-        
+                console.log(unitPrice);
+                console.log(newOrder);
+                console.log(shoppingCart);
+                console.log(data[i]);
+                
             }
-            $(`#btn${i}`).on("click", run);
+            $(`#btn${i}`).on("click", addtoCart);
         }
         
     });

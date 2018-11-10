@@ -16,7 +16,7 @@ const xbox = new Product("Xbox One X 1TB console", "Games", 474.95, 10);
 const playdoh = new Product("Play-Doh Sparkle compound", "Toys", 4.99, 100);
 const foundation = new Product("Mac Studio Fix Powder Plus Foundation", "Beauty", 49.99, 50);
 const tire = new Product("Michelin Defender LTX - 275/55R20", "Tire", 206.99, 25);
-const lays = new  Product("Lay's Classic Potato Chipsn(pack of 50)", "Snacks",16.33, 90);
+const lays = new  Product("Lay's Classic Potato Chips (pack of 50)", "Snacks",16.33, 90);
 const b12 = new Product("Vitamin B12 1000 mcg. Softgels 150Ct", "Health", 19.99, 35);
 
 module.exports ={

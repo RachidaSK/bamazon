@@ -1,0 +1,10 @@
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Microsoft Surface Pro 6", "Computers", 1199.00, 60);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES("Test-Driven Javascript Development", "Books", 39.99, 45);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Dakota L-Shaped Desk", "Home", 77.21, 20);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Exercise Bike with Resistance  ME-709", "Sport", 139.00, 70);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Xbox One X 1TB console", "Games", 474.95, 10);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Play-Doh Sparkle compound", "Toys", 4.99, 100);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Mac Studio Fix Powder Plus Foundation", "Beauty", 49.99, 50);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Michelin Defender LTX - 275/55R20", "Tire", 206.99, 25);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Lay's Classic Potato Chips (pack of 50)", "Snacks",16.33, 90);
+INSERT INTO Products (product_name, department_name, price, stock_quantity) VALUES ("Vitamin B12 1000 mcg. Softgels 150Ct", "Health", 19.99, 35);
