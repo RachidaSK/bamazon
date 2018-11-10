@@ -76,12 +76,15 @@ $(function () {
                 data[i].stock_quantity = parseInt(newStock);
                 
                 
-
-                $.ajax({
-                    type: "PUT",
-                    URL: `/api/products`,
-                    data: data[i]
-                });
+                
+                $.ajax(`/api/products/${data[i].id}`, {
+                    method: "PUT",
+                    contentType: 'application/json',
+                    processData: false,
+                    data: JSON.stringify(data[i])
+                }).then(function(){
+                    console.log("success");
+                })
 
 
                 console.log(selectedItem);
