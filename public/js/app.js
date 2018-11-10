@@ -1,4 +1,17 @@
 $(function () {
+    //This function shows the home page
+    const showHome = function () {
+        $(".home").removeClass("hide");
+        $("#cart-view").addClass("hide");
+    }
+
+    //This function shows the cart
+    const showCart = function () {
+        $("#cart-view").removeClass("hide");
+        $(".home").addClass("hide");
+    }
+
+    //This function handles the GET request
     $.ajax({
         method: "GET",
         url: "/api/products"
@@ -56,49 +69,91 @@ $(function () {
                 const buyQuantity = $(`#item-qty${i}`).val();
                 const unitPrice = $(`#price${i}`).val();
                 const stockQuantity = $(`#stock-qty${i}`).val();
+                const price = unitPrice.slice(2);
+                const totalPrice = parseFloat(price) * parseInt(buyQuantity);
+                console.log(price);
+                console.log(buyQuantity);
+                console.log(totalPrice);
 
                 //Clear the input field
                 $(`#item-qty${i}`).val('');
 
-                //Create an order object
-                const newOrder = {
-                   product_name: selectedItem,
-                   price: unitPrice,
-                   quantity: buyQuantity
-                }
-
-                //Push the object to the shopping cart
-                shoppingCart.push(newOrder);
-
-                const newStock = stockQuantity - buyQuantity;
-
                 //Update the stock
+                const newStock = stockQuantity - buyQuantity;
                 data[i].stock_quantity = parseInt(newStock);
-                
-                
-                
+
                 $.ajax(`/api/products/${data[i].id}`, {
                     method: "PUT",
                     contentType: 'application/json',
                     processData: false,
                     data: JSON.stringify(data[i])
-                }).then(function(){
+                }).then(function () {
                     console.log("success");
-                })
+                });
 
+                //Create an order object
+                const newOrder = {
+                    product_name: selectedItem,
+                    price: unitPrice,
+                    quantity: buyQuantity,
+                    totalPrice: totalPrice
+                }
 
-                console.log(selectedItem);
-                console.log(buyQuantity);
-                console.log(stockQuantity);
-                console.log(newStock);
-                console.log(unitPrice);
-                console.log(newOrder);
+                //Push the object to the shopping cart
+                shoppingCart.push(newOrder);
                 console.log(shoppingCart);
-                console.log(data[i]);
-                
+
+
+
             }
             $(`#btn${i}`).on("click", addtoCart);
         }
+
+        //This function renders the checkout table
+        const render = function () {
+            showCart();
+            const updatedCart = $("<table>").addClass("table table-striped");
+            const tableBody = $("<tbody>");
+            //Append the checkout table head
+            updatedCart.append(`   <thead>
+                                         <tr>
+                                           <th scope="col">id</th>
+                                           <th colspan="2">Item</th>
+                                           <th scope="col"></th>
+                                           <th scope="col">Unit Price</th>
+                                           <th scope="col">Quantity</th>
+                                           <th scope="col">Total</th
+                                         </tr>
+                                       </thead>`);
+
+            for (let i = 0; i < shoppingCart.length; i++) {
+                console.log(shoppingCart[i]);
+                //Append the checkout table body
+                tableBody.append(` <tr>
+                                     <th scope="row">${i + 1}</th>
+                                     <td colspan="2">${shoppingCart[i].product_name}</td>
+                                     <td scope="col"></td>
+                                     <td>${shoppingCart[i].price}</td>
+                                     <td>${shoppingCart[i].quantity}</td>
+                                    <td>${shoppingCart[i].totalPrice}</td>
+                                  </tr>              
+             `);
+               
+
+            }
+            tableBody.append(`<tr>
+                                  <td colspan="6">Total</td>
+                                  <td>$xxxx</td>
+                               <tr>`);
+
+            updatedCart.append(tableBody);
+
+            $(".shopping-cart").append(updatedCart);
+        }
         
+        $("#cart-btn").on("click", render);
+
+
     });
+    $("#home-btn").on("click", showHome);
 });

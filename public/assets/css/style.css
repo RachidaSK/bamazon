@@ -37,6 +37,10 @@ body {
     color: #ffffff;
 }
 
+.hide {
+    display: none;
+}
+
 @media screen and (min-width: 320px) {
     .product-name {
        font-size: 20px;
