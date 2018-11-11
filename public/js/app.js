@@ -16,18 +16,16 @@ $(function () {
     const roundPrice = function (price) {
         //transform the price to a string
         priceString = `${price}`;
-        console.log(priceString);
         if (priceString.includes(".")) {
             const dotIndex = priceString.indexOf(".");
-            console.log(dotIndex);
             roundedPrice = priceString.substring(0, dotIndex + 3);
-            console.log(roundedPrice);
-            priceNumb = parseFloat(roundedPrice);
-            console.log(priceNumb);
+            price = parseFloat(roundedPrice);
 
         }
-      return priceNumb;
+      return price;
     }
+
+    roundPrice();
 
     //This function handles the GET request
     $.ajax({
