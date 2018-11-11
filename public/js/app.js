@@ -11,6 +11,24 @@ $(function () {
         $(".home").addClass("hide");
     }
 
+    //This function rounds the price to 2 decimals
+
+    const roundPrice = function (price) {
+        //transform the price to a string
+        priceString = `${price}`;
+        console.log(priceString);
+        if (priceString.includes(".")) {
+            const dotIndex = priceString.indexOf(".");
+            console.log(dotIndex);
+            roundedPrice = priceString.substring(0, dotIndex + 3);
+            console.log(roundedPrice);
+            priceNumb = parseFloat(roundedPrice);
+            console.log(priceNumb);
+
+        }
+      return priceNumb;
+    }
+
     //This function handles the GET request
     $.ajax({
         method: "GET",
@@ -69,11 +87,21 @@ $(function () {
                 const buyQuantity = $(`#item-qty${i}`).val();
                 const unitPrice = $(`#price${i}`).val();
                 const stockQuantity = $(`#stock-qty${i}`).val();
+
+                //Determine the total price
                 const price = unitPrice.slice(2);
-                const totalPrice = parseFloat(price) * parseInt(buyQuantity);
-                console.log(price);
-                console.log(buyQuantity);
-                console.log(totalPrice);
+                let totalPrice = parseFloat(price) * parseInt(buyQuantity);
+
+                //    let totalString = `${totalPrice}`;
+
+                //     if (totalString.includes(".")) {
+                //         const dotIndex = totalString.indexOf(".");
+                //         roundedTotal = totalString.substring(0, dotIndex + 3);
+                //         totalPrice = parseFloat(roundedTotal);
+                //     } 
+
+                totalPrice = roundPrice(totalPrice);
+                console.log("This is test" + totalPrice);
 
                 //Clear the input field
                 $(`#item-qty${i}`).val('');
@@ -126,8 +154,11 @@ $(function () {
                                          </tr>
                                        </thead>`);
 
+            // Determine the total and append elements to the table
+            let cartTotal = 0;
             for (let i = 0; i < shoppingCart.length; i++) {
-                console.log(shoppingCart[i]);
+                cartTotal += parseFloat(shoppingCart[i].totalPrice);
+
                 //Append the checkout table body
                 tableBody.append(` <tr>
                                      <th scope="row">${i + 1}</th>
@@ -138,19 +169,20 @@ $(function () {
                                     <td>${shoppingCart[i].totalPrice}</td>
                                   </tr>              
              `);
-               
+
 
             }
+            console.log("This is cart Total" + cartTotal);
             tableBody.append(`<tr>
                                   <td colspan="6">Total</td>
-                                  <td>$xxxx</td>
+                                  <td>${cartTotal}</td>
                                <tr>`);
 
             updatedCart.append(tableBody);
 
             $(".shopping-cart").append(updatedCart);
         }
-        
+
         $("#cart-btn").on("click", render);
 
 
