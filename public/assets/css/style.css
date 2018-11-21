@@ -41,6 +41,11 @@ body {
     display: none;
 }
 
+#error {
+    background-color: #fa3aa0;
+    color: #000000;
+}
+
 @media screen and (min-width: 320px) {
     .product-name {
        font-size: 20px;

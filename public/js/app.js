@@ -12,7 +12,6 @@ $(function () {
     }
 
     //This function rounds the price to 2 decimals
-
     const roundPrice = function (price) {
         //transform the price to a string
         priceString = `${price}`;
@@ -22,10 +21,9 @@ $(function () {
             price = parseFloat(roundedPrice);
 
         }
-      return price;
+        return price;
     }
 
-    roundPrice();
 
     //This function handles the GET request
     $.ajax({
@@ -52,7 +50,7 @@ $(function () {
                                 </div>`);
 
             // Append the card-body div to every productcard
-            productCard.append(`<div class='card-body'>
+            productCard.append(`<div class='card-body' id='product${i}'>
                                     <div class='d-flex flex-row bd-highlight justify-content-between mb-3'>
                                         <div class='bd-highlight col-5 col-sm-8 col-md-8 item-name'>
                                            <input type='text' readonly class='form-control-plaintext ml-3 product-name' id='item${i}' value="${data[i].product_name}">
@@ -76,46 +74,58 @@ $(function () {
 
             $(".productlist").append(productCard);
 
+
             // Add Items to cart on click
 
-            const addtoCart = function () {
-
+            const addtoCart = function (e) {
+                e.preventDefault();
                 //Grab input values
                 const selectedItem = $(`#item${i}`).val();
                 const buyQuantity = $(`#item-qty${i}`).val();
                 const unitPrice = $(`#price${i}`).val();
                 const stockQuantity = $(`#stock-qty${i}`).val();
 
+                //Clear the input field
+                $(`#item-qty${i}`).val('');
+
+                //Check validity
+                let isValid = true;
+                if (isNaN(buyQuantity)) {
+                    isValid = false;
+                    $(`#product${i}`).append("<p class='text-center' id='error'>Please enter a number</p>");
+                } else if (buyQuantity <= 0) {
+                    isValid = false;
+                    $(`#product${i}`).append("<p class='text-center' id='error'>Please enter a valid number</p>");
+                } else if (buyQuantity > stockQuantity) {
+                    isValid = false;
+                    $(`#product${i}`).append("<p class='text-center' id='error'> This quantity is too high</p>");
+                }
+
                 //Determine the total price
                 const price = unitPrice.slice(2);
                 let totalPrice = parseFloat(price) * parseInt(buyQuantity);
 
-                //    let totalString = `${totalPrice}`;
-
-                //     if (totalString.includes(".")) {
-                //         const dotIndex = totalString.indexOf(".");
-                //         roundedTotal = totalString.substring(0, dotIndex + 3);
-                //         totalPrice = parseFloat(roundedTotal);
-                //     } 
-
+                // Round the total Price
                 totalPrice = roundPrice(totalPrice);
                 console.log("This is test" + totalPrice);
-
-                //Clear the input field
-                $(`#item-qty${i}`).val('');
 
                 //Update the stock
                 const newStock = stockQuantity - buyQuantity;
                 data[i].stock_quantity = parseInt(newStock);
 
-                $.ajax(`/api/products/${data[i].id}`, {
-                    method: "PUT",
-                    contentType: 'application/json',
-                    processData: false,
-                    data: JSON.stringify(data[i])
-                }).then(function () {
-                    console.log("success");
-                });
+                if (isValid) {
+                    $.ajax(`/api/products/${data[i].id}`, {
+                        method: "PUT",
+                        contentType: 'application/json',
+                        processData: false,
+                        data: JSON.stringify(data[i])
+                    }).then(function () {
+                        console.log("success");
+                    });
+                } else {
+                    console.log("cannot update");
+                }
+
 
                 //Create an order object
                 const newOrder = {
@@ -128,8 +138,6 @@ $(function () {
                 //Push the object to the shopping cart
                 shoppingCart.push(newOrder);
                 console.log(shoppingCart);
-
-
 
             }
             $(`#btn${i}`).on("click", addtoCart);
@@ -186,4 +194,6 @@ $(function () {
 
     });
     $("#home-btn").on("click", showHome);
+
+    //Validation
 });
