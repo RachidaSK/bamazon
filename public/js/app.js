@@ -5,11 +5,6 @@ $(function () {
         $("#cart-view").addClass("hide");
     }
 
-    //This function shows the cart
-    const showCart = function () {
-        $("#cart-view").removeClass("hide");
-        $(".home").addClass("hide");
-    }
 
     //This function rounds the price to 2 decimals
     const roundPrice = function (price) {
@@ -96,8 +91,9 @@ $(function () {
                 } else if (buyQuantity <= 0) {
                     isValid = false;
                     $(`#product${i}`).append("<p class='text-center' id='error'>Please enter a valid number</p>");
-                } else if (buyQuantity > stockQuantity) {
+                } else if (parseInt(buyQuantity) > parseInt(stockQuantity)) {
                     isValid = false;
+                    console.log("This is buy" + buyQuantity, "This is stock" + stockQuantity)
                     $(`#product${i}`).append("<p class='text-center' id='error'> This quantity is too high</p>");
                 }
 
@@ -113,6 +109,14 @@ $(function () {
                 const newStock = stockQuantity - buyQuantity;
                 data[i].stock_quantity = parseInt(newStock);
 
+                //Create an order object
+                const newOrder = {
+                    product_name: selectedItem,
+                    price: unitPrice,
+                    quantity: buyQuantity,
+                    totalPrice: totalPrice
+                }
+
                 if (isValid) {
                     $.ajax(`/api/products/${data[i].id}`, {
                         method: "PUT",
@@ -122,44 +126,24 @@ $(function () {
                     }).then(function () {
                         console.log("success");
                     });
+
+                    //Push the object to the shopping cart
+                    shoppingCart.push(newOrder);
+                    console.log(shoppingCart);
+                    renderCart();
+
                 } else {
                     console.log("cannot update");
                 }
 
-
-                //Create an order object
-                const newOrder = {
-                    product_name: selectedItem,
-                    price: unitPrice,
-                    quantity: buyQuantity,
-                    totalPrice: totalPrice
-                }
-
-                //Push the object to the shopping cart
-                shoppingCart.push(newOrder);
-                console.log(shoppingCart);
 
             }
             $(`#btn${i}`).on("click", addtoCart);
         }
 
         //This function renders the checkout table
-        const render = function () {
-            showCart();
-            const updatedCart = $("<table>").addClass("table table-striped");
-            const tableBody = $("<tbody>");
-            //Append the checkout table head
-            updatedCart.append(`   <thead>
-                                         <tr>
-                                           <th scope="col">id</th>
-                                           <th colspan="2">Item</th>
-                                           <th scope="col"></th>
-                                           <th scope="col">Unit Price</th>
-                                           <th scope="col">Quantity</th>
-                                           <th scope="col">Total</th
-                                         </tr>
-                                       </thead>`);
-
+        const renderCart = function () {
+            const tableBody = $(".shopping-cart");
             // Determine the total and append elements to the table
             let cartTotal = 0;
             for (let i = 0; i < shoppingCart.length; i++) {
@@ -175,8 +159,6 @@ $(function () {
                                     <td>${shoppingCart[i].totalPrice}</td>
                                   </tr>              
              `);
-
-
             }
             console.log("This is cart Total" + cartTotal);
             tableBody.append(`<tr>
@@ -184,12 +166,16 @@ $(function () {
                                   <td>${cartTotal}</td>
                                <tr>`);
 
-            updatedCart.append(tableBody);
-
-            $(".shopping-cart").append(updatedCart);
         }
 
-        $("#cart-btn").on("click", render);
+        //This function shows the cart
+        const showCart = function () {
+            $("#cart-view").removeClass("hide");
+            $(".home").addClass("hide");
+           
+        }
+
+        $("#cart-btn").on("click", showCart);
 
 
     });
