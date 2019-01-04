@@ -93,7 +93,6 @@ $(function () {
                     $(`#product${i}`).append("<p class='text-center' id='error'>Please enter a valid number</p>");
                 } else if (parseInt(buyQuantity) > parseInt(stockQuantity)) {
                     isValid = false;
-                    console.log("This is buy" + buyQuantity, "This is stock" + stockQuantity)
                     $(`#product${i}`).append("<p class='text-center' id='error'> This quantity is too high</p>");
                 }
 
@@ -156,14 +155,14 @@ $(function () {
                                      <td scope="col"></td>
                                      <td>${shoppingCart[i].price}</td>
                                      <td>${shoppingCart[i].quantity}</td>
-                                    <td>${shoppingCart[i].totalPrice}</td>
+                                    <td>$${shoppingCart[i].totalPrice}</td>
                                   </tr>              
              `);
             }
             console.log("This is cart Total" + cartTotal);
             tableBody.append(`<tr>
                                   <td colspan="6">Total</td>
-                                  <td>${cartTotal}</td>
+                                  <td>$${cartTotal}</td>
                                <tr>`);
 
         }
