@@ -129,7 +129,7 @@ $(function () {
                     //Push the object to the shopping cart
                     shoppingCart.push(newOrder);
                     console.log(shoppingCart);
-                    renderCart();
+                    
 
                 } else {
                     console.log("cannot update");
@@ -171,7 +171,7 @@ $(function () {
         const showCart = function () {
             $("#cart-view").removeClass("hide");
             $(".home").addClass("hide");
-           
+            renderCart();
         }
 
         $("#cart-btn").on("click", showCart);
