@@ -8,6 +8,7 @@ $(function () {
             $("#welcome").addClass("hide");
             $(".addPdt-view").addClass("hide");
             $(".inventory-view").addClass("hide");
+            $(".addStock-view").addClass("hide");
             $(".pdt-view").removeClass("hide");
 
             $(".pdt-view").append(`<h5 class="mt-3">Products For Sale</h5> 
@@ -45,6 +46,7 @@ $(function () {
             $("#welcome").addClass("hide");
             $(".pdt-view").addClass("hide");
             $(".inventory-view").addClass("hide");
+            $(".addStock-view").addClass("hide");
             $(".addPdt-view").removeClass("hide");
 
             $(".addPdt-view").append(`<p>Please click <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter" id="addStock-btn">Here</button>to add a new product to the stock</p>
@@ -112,10 +114,12 @@ $(function () {
             $("#welcome").addClass("hide");
             $(".pdt-view").addClass("hide");
             $(".addPdt-view").addClass("hide");
+            $(".addStock-view").addClass("hide");
             $(".inventory-view").removeClass("hide");
 
-            $(".inventory-view").append(`<p>Please find below low inventories</p>`)
-            $(".inventory-view").append(`<div class="row">
+   
+            $(".inventory-view").append(`<p>Please find below low inventories</p>
+                                          <div class="row">
                                             <div class="col-md-8 mx-auto">
                                                 <table class="table table-bordered mt-4">
                                                     <thead>
@@ -131,9 +135,7 @@ $(function () {
                                             </div>
                                          </div>`)
             for (let i = 0; i < data.length; i++) {
-                console.log(data[i].stock_quantity);
                 if(data[i].stock_quantity < 15) {
-                    console.log(data[i])
                     $("#inv-table").append(`<tr>
                                                 <th scope="row" class="text-center">${data[i].id}</th> 
                                                 <td>${data[i].product_name}</td>
@@ -145,6 +147,53 @@ $(function () {
             }
         }
         $("#viewInvent-btn").on("click", showLowInventory);
+
+        const updateStock = function () {
+            $("#welcome").addClass("hide");
+            $(".pdt-view").addClass("hide");
+            $(".addPdt-view").addClass("hide");
+            $(".inventory-view").addClass("hide");
+            $(".addStock-view").removeClass("hide");
+
+            $(".addStock-view").append(`<p class="mt-4">Welcome! You can "add more" or "remove some" of any item in the stock </p>
+                                        <div class="row">
+                                            <div class="col-md-8 mx-auto">
+                                                <table class="table table-bordered mt-4">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">ID</th>
+                                                            <th scope="col">Product</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Quantity</th>
+                                                            <th scope="col">Update Quantity</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="stock-table"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>`)
+
+            for (let i = 0; i < data.length; i++) {
+                $("#stock-table").append(`<tr>
+                                            <th scope="row" class="text-center">${data[i].id}</th> 
+                                            <td>${data[i].product_name}</td>
+                                            <td>$${data[i].price}</td>
+                                            <td class="text-center">${data[i].stock_quantity}</td>
+                                            <td class="text-center"> 
+                                                <form>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control mx-auto stock-quantity" id="formGroupExampleInput">
+                                                    </div> 
+                                                    <button type="button" class="btn btn-danger stock-btn minusBtn"><i class="fas fa-minus-square"></i></button>
+                                                    <button type="button" class="btn btn-success stock-btn"><i class="fas fa-plus-square"></i></button>
+                                                    
+                                                </form>
+                                            </td>
+                                        </tr>`)
+
+            }
+        }
+        $("#updateStock-btn").on("click", updateStock);
 
     })
 

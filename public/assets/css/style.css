@@ -29,6 +29,19 @@ body {
     width: 60px;
 }
 
+input.stock-quantity {
+    width: 60px;
+    font-size: 26px;
+}
+
+button.stock-btn {
+    font-size: 18px;
+}
+
+.minusBtn {
+    margin-right: 45px;
+}
+
 .add-cart-btn {
     margin: 20px 0px 0px -10px;
 }
