@@ -100,7 +100,7 @@ $(function () {
                     department_name: department,
                     price: price,
                     stock_quantity: quantity
-                }).then(function(data) {
+                }).then(function (data) {
                     $(".addPdt-view").append(`<p><i>Item has been successfully added</i></p>`)
                 })
             }
@@ -110,14 +110,14 @@ $(function () {
         }
         $("#addPdt-btn").on("click", newProduct);
 
-        const showLowInventory = function() {
+        const showLowInventory = function () {
             $("#welcome").addClass("hide");
             $(".pdt-view").addClass("hide");
             $(".addPdt-view").addClass("hide");
             $(".addStock-view").addClass("hide");
             $(".inventory-view").removeClass("hide");
 
-   
+
             $(".inventory-view").append(`<p>Please find below low inventories</p>
                                           <div class="row">
                                             <div class="col-md-8 mx-auto">
@@ -135,14 +135,14 @@ $(function () {
                                             </div>
                                          </div>`)
             for (let i = 0; i < data.length; i++) {
-                if(data[i].stock_quantity < 15) {
+                if (data[i].stock_quantity < 15) {
                     $("#inv-table").append(`<tr>
                                                 <th scope="row" class="text-center">${data[i].id}</th> 
                                                 <td>${data[i].product_name}</td>
                                                 <td>$${data[i].price}</td>
                                                 <td class="text-center">${data[i].stock_quantity}</td>
                                             </tr>`)
-                    
+
                 }
             }
         }
@@ -182,16 +182,59 @@ $(function () {
                                             <td class="text-center"> 
                                                 <form>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control mx-auto stock-quantity" id="formGroupExampleInput">
+                                                        <input type="text" class="form-control mx-auto stock-quantity" id="quantityUpInput${i}">
                                                     </div> 
-                                                    <button type="button" class="btn btn-danger stock-btn minusBtn"><i class="fas fa-minus-square"></i></button>
-                                                    <button type="button" class="btn btn-success stock-btn"><i class="fas fa-plus-square"></i></button>
+                                                    <button type="button" class="btn btn-danger stock-btn minusBtn" id="minus${i}"><i class="fas fa-minus-square"></i></button>
+                                                    <button type="button" class="btn btn-success stock-btn" id="add${i}"><i class="fas fa-plus-square"></i></button>
                                                     
                                                 </form>
                                             </td>
                                         </tr>`)
 
+
+
+                const quantityAdd = function () {
+                    const updateQuantity = $(`#quantityUpInput${i}`).val();
+                    const stockQty = data[i].stock_quantity;
+
+                    //Update the stock
+                    const newStock = stockQty + parseInt(updateQuantity);
+                    data[i].stock_quantity = parseInt(newStock);
+
+                    $.ajax(`/api/products/${data[i].id}`, {
+                        method: "PUT",
+                        contentType: 'application/json',
+                        processData: false,
+                        data: JSON.stringify(data[i])
+                    }).then(function () {
+                        $(`#quantityUpInput${i}`).val('');
+                    });
+                }
+
+                const quantityMinus = function () {
+                    const updateQuantity = $(`#quantityUpInput${i}`).val();
+                    const stockQty = data[i].stock_quantity;
+
+                    //Update the stock
+                    const newStock = stockQty - parseInt(updateQuantity);
+                    data[i].stock_quantity = parseInt(newStock);
+
+                    $.ajax(`/api/products/${data[i].id}`, {
+                        method: "PUT",
+                        contentType: 'application/json',
+                        processData: false,
+                        data: JSON.stringify(data[i])
+                    }).then(function () {
+                        $(`#quantityUpInput${i}`).val('');
+                    });
+                }
+
+                $(`#minus${i}`).on("click", quantityMinus)
+                $(`#add${i}`).on("click", quantityAdd)
+
             }
+
+
         }
         $("#updateStock-btn").on("click", updateStock);
 
